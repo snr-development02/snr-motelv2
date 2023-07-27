@@ -4,7 +4,7 @@ local ESX = nil
     
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(1500)
+        Citizen.Wait(5000)
         if Config.ESXorQBorNewQB == "esx" then
             ESX = nil
             Citizen.CreateThread(function()
