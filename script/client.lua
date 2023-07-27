@@ -29,7 +29,7 @@ Citizen.CreateThread(function()
             Citizen.CreateThread(function()
                 while true do
                     Citizen.Wait(500)
-                    TriggerServerEvent("snr:motel:print", "snr-motel Scripttindeki shared/config.lua üzerinden Config.ESXorQBorNewQB seçeneğini doğru giriniz! (esx/qb/newqb)")
+                    TriggerServerEvent("snr:motel:print", locale.uyari)
                 end
             end)
         end
@@ -60,7 +60,7 @@ AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
     if Config.ESXorQBorNewQB == "esx" then
     else
         suankimoteli = math.random(1, #pinkcage)
-        QBCore.Functions.Notify('Yeni motel odası verildi! Oda numaran: '..suankimoteli, "success", 2500)
+        QBCore.Functions.Notify(locale.Newmotel ..suankimoteli, "success", 2500)
     end
 end)
 
@@ -69,7 +69,7 @@ AddEventHandler('esx:playerLoaded', function()
     if Config.ESXorQBorNewQB == "qb" or Config.ESXorQBorNewQB == "newqb" then
     else
         suankimoteli = math.random(1, #pinkcage)
-        TriggerEvent('notification', 'Yeni motel odası verildi! Oda numaran: '..suankimoteli, 1)
+        TriggerEvent('notification', locale.Newmotel ..suankimoteli, 1)
     end
 end)
 
@@ -108,7 +108,7 @@ Citizen.CreateThread(function()
                 if stashdistance <= 1.5 then
                     if Config.Target == true then
                         if Config.ESXorQBorNewQB == "esx" then
-                            DrawText3D(pinkcage[suankimoteli].stash, '[~g~E~w~] - Sandık')
+                            DrawText3D(pinkcage[suankimoteli].stash, locale.sandik)
                             if IsControlJustReleased(0, 38) then
                                 OpenMotelInventory()
                             end
@@ -131,7 +131,7 @@ Citizen.CreateThread(function()
                                             type = "Client",
                                             event = "snr:motelstash",
                                             icon = "fas fa-circle",
-                                            label = "Sandığı aç"
+                                            label = locale.targetsandik
                                         }
                                     },
                                     distance = 1.5
@@ -139,7 +139,7 @@ Citizen.CreateThread(function()
                             )
                         end
                     else
-                        DrawText3D(pinkcage[suankimoteli].stash, '[~g~E~w~] - Sandık')
+                        DrawText3D(pinkcage[suankimoteli].stash, locale.sandik)
                         if IsControlJustReleased(0, 38) then
                             OpenMotelInventory()
                         end
@@ -148,7 +148,7 @@ Citizen.CreateThread(function()
                 if clothedistance <= 1.5 then
                     if Config.Target == true then
                         if Config.ESXorQBorNewQB == "esx" then
-                            DrawText3D(pinkcage[suankimoteli].clothe, '[~g~E~w~] - Gardrop')
+                            DrawText3D(pinkcage[suankimoteli].clothe, locale.gardrop)
                             if IsControlJustReleased(0, 38) then
                                 OpenMotelWardrobe()
                             end
@@ -171,7 +171,7 @@ Citizen.CreateThread(function()
                                             type = "Client",
                                             event = "snr:gardirop",
                                             icon = "fas fa-circle",
-                                            label = "Gardıropu aç"
+                                            label = locale.targetgardrop
                                         }
                                     },
                                     distance = 1.5
@@ -179,7 +179,7 @@ Citizen.CreateThread(function()
                             )
                         end
                     else
-                        DrawText3D(pinkcage[suankimoteli].clothe, '[~g~E~w~] - Gardrop')
+                        DrawText3D(pinkcage[suankimoteli].clothe, locale.gardrop)
                         if IsControlJustReleased(0, 38) then
                             OpenMotelWardrobe()
                         end
