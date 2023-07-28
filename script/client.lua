@@ -58,6 +58,7 @@ local pinkcage = {
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
     if Config.ESXorQBorNewQB == "esx" then
+	return
     else
         suankimoteli = math.random(1, #pinkcage)
         QBCore.Functions.Notify(locale.Newmotel ..suankimoteli, "success", 2500)
@@ -67,6 +68,7 @@ end)
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function()
     if Config.ESXorQBorNewQB == "qb" or Config.ESXorQBorNewQB == "newqb" then
+	return
     else
         suankimoteli = math.random(1, #pinkcage)
         TriggerEvent('notification', locale.Newmotel ..suankimoteli, 1)
