@@ -14,7 +14,7 @@ Citizen.CreateThread(function()
                 end
                 ESX.PlayerData = ESX.GetPlayerData()
             end)
-
+	break
         elseif Config.ESXorQBorNewQB == "qb" then
             QBCore = nil
             Citizen.CreateThread(function()
@@ -23,8 +23,10 @@ Citizen.CreateThread(function()
                 Citizen.Wait(30) -- Saniye Bekletme
             end
             end)
+	break
         elseif Config.ESXorQBorNewQB == "newqb" then
             QBCore = exports['qb-core']:GetCoreObject()
+	break
         else
             Citizen.CreateThread(function()
                 while true do
