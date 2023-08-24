@@ -164,6 +164,89 @@ AddEventHandler('esx:playerLoaded', function()
     TriggerEvent('notification', locale.Newmotel ..suankimoteli, 1)
 end)
 
+RegisterNetEvent("snr:gardirop")
+AddEventHandler("snr:gardirop", function()
+    if Config.ESXorQBorNewQB == "esx" then
+        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'room',{
+            title    = 'Gardrop',
+            align    = 'right',
+            elements = {
+                {label = 'Kıyafetler', value = 'player_dressing'},
+                {label = 'Kıyafet Sil', value = 'remove_cloth'}
+            }
+        }, function(data, menu)
+            if data.current.value == 'player_dressing' then
+                menu.close()
+                ESX.TriggerServerCallback('motel:server:getPlayerDressing', function(dressing)
+                    elements = {}
+                    for i=1, #dressing, 1 do
+                        table.insert(elements, {
+                            label = dressing[i],
+                            value = i
+                        })
+                    end
+                    ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'player_dressing',
+                    {
+                        title    = 'Kıyafetler',
+                        align    = 'right',
+                        elements = elements
+                    }, function(data2, menu2)
+                        TriggerEvent('skinchanger:getSkin', function(skin)
+                            ESX.TriggerServerCallback('motel:server:getPlayerOutfit', function(clothes)
+                                TriggerEvent('skinchanger:loadClothes', skin, clothes)
+                                TriggerEvent('esx_skin:setLastSkin', skin)
+                                TriggerEvent('skinchanger:getSkin', function(skin)
+                                    TriggerServerEvent('esx_skin:save', skin)
+                                end)
+                            end, data2.current.value)
+                        end)
+                    end, function(data2, menu2)
+                        menu2.close()
+                    end)
+                end)
+            elseif data.current.value == 'remove_cloth' then
+                menu.close()
+                ESX.TriggerServerCallback('motel:server:getPlayerDressing', function(dressing)
+                    elements = {}
+                    for i=1, #dressing, 1 do
+                        table.insert(elements, {
+                            label = dressing[i],
+                            value = i
+                        })
+                    end
+                    ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'remove_cloth', {
+                        title    = 'Kıyafet Sil',
+                        align    = 'right',
+                        elements = elements
+                    }, function(data2, menu2)
+                        menu2.close()
+                        TriggerServerEvent('motel:server:removeOutfit', data2.current.value)
+                        TriggerEvent('notification', 'Kıyafet silindi', 1)
+                    end, function(data2, menu2)
+                        menu2.close()
+                    end)
+                end)
+            end
+        end, function(data, menu)
+            menu.close()
+        end)
+    else
+        TriggerEvent('qb-clothing:client:openOutfitMenu')
+    end
+end)
+
+RegisterNetEvent("snr:motelstash")
+AddEventHandler("snr:motelstash", function()
+    if Config.ESXorQBorNewQB == "esx" then
+        ESX.PlayerData = xPlayer
+        TriggerServerEvent("inventory:server:OpenInventory", "stash", "snrmotelstash_"..ESX.GetPlayerData().identifier)
+        TriggerEvent("inventory:client:SetCurrentStash","snrmotelstash_"..ESX.GetPlayerData().identifier)
+    else
+        TriggerServerEvent("inventory:server:OpenInventory", "stash", "snrmotelstash_"..QBCore.Functions.GetPlayerData().citizenid)
+        TriggerEvent("inventory:client:SetCurrentStash", "snrmotelstash_"..QBCore.Functions.GetPlayerData().citizenid)
+    end
+end)
+
 -- Threads
 
 CreateThread(function()
@@ -256,88 +339,5 @@ CreateThread(function()
                 beklemewaitmotel = 2500
             end
         end
-    end
-end)
-
-RegisterNetEvent("snr:gardirop")
-AddEventHandler("snr:gardirop", function()
-    if Config.ESXorQBorNewQB == "esx" then
-        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'room',{
-            title    = 'Gardrop',
-            align    = 'right',
-            elements = {
-                {label = 'Kıyafetler', value = 'player_dressing'},
-                {label = 'Kıyafet Sil', value = 'remove_cloth'}
-            }
-        }, function(data, menu)
-            if data.current.value == 'player_dressing' then
-                menu.close()
-                ESX.TriggerServerCallback('motel:server:getPlayerDressing', function(dressing)
-                    elements = {}
-                    for i=1, #dressing, 1 do
-                        table.insert(elements, {
-                            label = dressing[i],
-                            value = i
-                        })
-                    end
-                    ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'player_dressing',
-                    {
-                        title    = 'Kıyafetler',
-                        align    = 'right',
-                        elements = elements
-                    }, function(data2, menu2)
-                        TriggerEvent('skinchanger:getSkin', function(skin)
-                            ESX.TriggerServerCallback('motel:server:getPlayerOutfit', function(clothes)
-                                TriggerEvent('skinchanger:loadClothes', skin, clothes)
-                                TriggerEvent('esx_skin:setLastSkin', skin)
-                                TriggerEvent('skinchanger:getSkin', function(skin)
-                                    TriggerServerEvent('esx_skin:save', skin)
-                                end)
-                            end, data2.current.value)
-                        end)
-                    end, function(data2, menu2)
-                        menu2.close()
-                    end)
-                end)
-            elseif data.current.value == 'remove_cloth' then
-                menu.close()
-                ESX.TriggerServerCallback('motel:server:getPlayerDressing', function(dressing)
-                    elements = {}
-                    for i=1, #dressing, 1 do
-                        table.insert(elements, {
-                            label = dressing[i],
-                            value = i
-                        })
-                    end
-                    ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'remove_cloth', {
-                        title    = 'Kıyafet Sil',
-                        align    = 'right',
-                        elements = elements
-                    }, function(data2, menu2)
-                        menu2.close()
-                        TriggerServerEvent('motel:server:removeOutfit', data2.current.value)
-                        TriggerEvent('notification', 'Kıyafet silindi', 1)
-                    end, function(data2, menu2)
-                        menu2.close()
-                    end)
-                end)
-            end
-        end, function(data, menu)
-            menu.close()
-        end)
-    else
-        TriggerEvent('qb-clothing:client:openOutfitMenu')
-    end
-end)
-
-RegisterNetEvent("snr:motelstash")
-AddEventHandler("snr:motelstash", function()
-    if Config.ESXorQBorNewQB == "esx" then
-        ESX.PlayerData = xPlayer
-        TriggerServerEvent("inventory:server:OpenInventory", "stash", "snrmotelstash_"..ESX.GetPlayerData().identifier)
-        TriggerEvent("inventory:client:SetCurrentStash","snrmotelstash_"..ESX.GetPlayerData().identifier)
-    else
-        TriggerServerEvent("inventory:server:OpenInventory", "stash", "snrmotelstash_"..QBCore.Functions.GetPlayerData().citizenid)
-        TriggerEvent("inventory:client:SetCurrentStash", "snrmotelstash_"..QBCore.Functions.GetPlayerData().citizenid)
     end
 end)
